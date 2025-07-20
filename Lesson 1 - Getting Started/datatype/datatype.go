@@ -19,3 +19,16 @@ func main() {
   fmt.Println("Float:   ", c)
   fmt.Println("String:  ", d)
 }
+
+// Cách lấy kiểu dữ liệu của biến trong Go:
+// - Sử dụng hàm fmt.Printf với định dạng %T để in ra kiểu dữ liệu của biến.
+// - Ví dụ: fmt.Printf("Type of a: %T\n", a) sẽ in ra kiểu dữ liệu của biến a.
+
+// Cách lấy giá trị của biến trong Go:
+// - Sử dụng hàm fmt.Println với định dạng %v để in ra giá trị của biến.
+// - Ví dụ: fmt.Println("Value of a: %v", a) sẽ in ra giá trị của biến a.
+
+// Số nguyên trong Go có hai loại: 
+// - int: Số nguyên có dấu, kích thước phụ thuộc vào hệ thống (32-bit hoặc 64-bit).
+// - uint: Số nguyên không dấu, cũng phụ thuộc vào hệ thống.
+
