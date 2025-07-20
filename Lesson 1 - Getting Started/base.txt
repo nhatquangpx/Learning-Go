@@ -1,0 +1,27 @@
+Go là gì?
+- Ngôn ngữ lập trình mã nguồn mở, nhiều nền tảng
+- Được sử dụng để tạo ứng dụng hiệu suất cao
+- Ngôn ngữ nhanh, được gõ tĩnh, được biên dịch
+- Được phát triển tại Google
+- Cú pháp tương tự C++
+
+Go được sử dụng làm gì?
+- Phát triển web phía server
+- Các chương trình dựa trên mạng
+- Các ứng dụng doanh nghiệp đa nền tảng
+- Nền tảng Cloud
+
+Tại sao nên dử dụng Go?
+- Dễ học
+- Thời gian chạy và biên dịch nhanh
+- Hỗ trợ tính đồng thời 
+- Có chức năng quản lý bộ nhớ
+- Hoạt động trên nhiều nền tảng
+
+So sánh điểm khác biệt:
+- Hỗ trợ đồng thời qua goroutine và kênh
+- Không hỗ trợ các lớp và đối tượng
+- Không hỗ trợ kế thừa
+
+# Kiểu tĩnh: kiểu biến được biết đến tại thời điểm biên dịch
+# Thời gian biên dịch: dịch mã thành một chương trình có thể thực thi
