@@ -1,0 +1,56 @@
+# Map là gì?
+- Kiểu dữ liệu có sẵn do Golang cung cấp
+- Tập hợp key value
+- Value được liên kết với key và chỉ có thể truy xuất bằng key tương ứng
+
+# Key 
+- Có thể là string, number hay bất kì kiểu nào có thể so sánh được
+
+# Khởi tạo map, dùng cú pháp:
+
+    make(map[<kiểu của key>]<kiểu của value>)
+
+Ví dụ:
+
+    var personAge := make(map[string]int)
+
+# Nếu khởi tạo giá trị mặc định, không cần dùng make:
+
+    var personAge := map[string]int {
+        "Jack": 24,
+    }
+
+# Thêm một phần tử:
+
+    personAge["Tony"] = 56
+
+# Truy xuất một phần tử:
+
+    <tên biến>[<key>]
+
+Ví dụ:
+
+    fmt.Println("Age of Tony: ", personAge["Tony"])
+
+Nếu truy xuất đến phần tử không tồn tại, map vẫn trả về giá trị mặc định
+Ví dụ: Trong trường hợp trên nếu truy xuất tuổi của người tên James, không tồn tại nên sẽ trả về kết quả là 0
+
+Vì vậy, cú pháp để kiểm tra phần tử có tồn tại trong map không như sau:
+
+    value, ok := personAge["James"]
+
+Nếu ok là True thì có tồn tại, ngược lại thì không
+
+# Xóa một phần tử:
+
+    delete(<tên map>, <key>)
+
+Câu lệnh không return giá trị gì
+
+# So sánh map:
+- Golang không hỗ trợ so sánh hai map
+- Nếu cần so sánh, sử dụng thư viện "reflect" hoặc tự thực hiện so sánh các phần tử trong 2 map
+
+# Map là kiểu tham chiếu, tức là sẽ lưu địa chỉ vùng nhớ chứa nội dung
+- Khi map được gán cho biến mới, biến mới cũng sẽ lưu địa chỉ vùng nhớ chứa nội dung của map
+- Nếu biến map này thay đổi giá trị thì biến map kia cũng ánh xạ tương ứng
