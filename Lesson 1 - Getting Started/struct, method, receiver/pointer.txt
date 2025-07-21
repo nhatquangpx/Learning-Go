@@ -1,0 +1,57 @@
+# Con trỏ là một biến lưu trữ địa chỉ của một biến khác trong bộ nhớ
+Ví dụ:
+
+    var a *int = &b         // con trỏ a lưu địa chỉ của biến b
+
+Trong ví dụ trê, *int dùng để khai báo biến a thuộc kiểu con trỏ int. 
+Toán tử & dùng để lấy địa chỉ của biến
+Biến con trỏ được khởi tạo nhưng không gán giá trị cho nó, sẽ nhận giá trị nil
+
+# Khai báo biến con trỏ theo cách rút gọn:
+
+    <tên biến> := địa chỉ
+
+Ví dụ:
+a := &b
+
+# Khai báo biến con trỏ bằng câu lệnh new:
+
+    <tên biến> := new(<type>)
+
+Ví dụ: 
+size := new(int)
+*size = 85
+Với kiểu khai báo này, Golang cấp phát vùng nhớ chứa giá trị 0 cho biến size
+Với dòng lệnh "*size = 85", vùng nhớ mà biến size tham chiếu tới sẽ được gán giá trị 85
+
+# Các điều lưu ý khi sử dụng con trỏ:
+
+a := &b
+=> b == *a 
+
+Như vậy nếu thay đổi giá trị biến a thì giá trị biến b cũng thay đổi tương ứng
+
+# Truyền biến con trỏ vào function: Có thể thay đổi giá trị của biến thông qua function
+package main
+
+import (  
+    "fmt"
+)
+
+func change(val *int) {  
+    *val = 55           // Giá trị được lưu ở địa chỉ của val là *val
+}
+func main() {  
+    a := 58
+    fmt.Println("value of a before function call is",a)
+    b := &a            // b chứa địa chỉ biến a
+    change(b)          // Truyển địa chỉ biến a vào, sau đó thay đổi giá trị được lưu ở địa chỉ của biến a
+    fmt.Println("value of a after function call is", a)
+}
+// kết quả in ra màn hình
+// value of a before function call is 58  
+// value of a after function call is 55 
+
+Trong ví dụ trên, biến con trỏ b được truyền vào hàm chage theo kiểu tham chiếu
+Khi biến val thay đổi giá trị trong hàm change, thực chất là vùng nhớ của biến b thay đổi giá trị
+Do đó hàm change có thể thay đổi giá trị của biến b
