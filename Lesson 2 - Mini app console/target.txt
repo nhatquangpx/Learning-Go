@@ -1,0 +1,4 @@
+Mục tiêu buổi học:
+- Áp dụng các kiến thức về struct, slice, method, for, if 
+- Viết một ứng dụng nhỏ chạy trong terminal để quản lí bài viết 
+- Thực hành tư duy CRUD mà không cần đến server hoặc database
