@@ -4,7 +4,7 @@ Hiểu đơn giản: Interface là một đại diện, được dùng cho trư�
 Ví dụ:
     // interface definition
     type VowelsFinder interface {
-        FindVowels() []rune
+        FindVowels() []rune             // Kiểu rune biểu diễn 1 ký tự Unicode ~~ 32 bit
     }
 
     type MyString string
@@ -43,7 +43,7 @@ Nhân viên có nhiều loại như nhân viên hợp động, nhân viên lâu 
     }
 
     // salary of permanent employee is the sum of basic pay and pf 
-    func (p Permanent) CaculateSalary() int {
+    func (p Permanent) CalculateSalary() int {
         return p.basicpay + p.pf
     }
 
@@ -59,3 +59,56 @@ Nhân viên có nhiều loại như nhân viên hợp động, nhân viên lâu 
         fmt.Printf("Total expense per month $%d", pemp1.CalculateSalary() + pemp2.CalculateSalary() + cemp1.CalculateSalary())
     }
 
+Như vậy chúng ta cần dùng interface để bao quát được việc tính lương của Permanent và contract
+
+    type SalaryCalculator interface {
+        CalculatorSalary() int
+    }
+
+    // def Permanent
+    // def Contract
+    // def CalculateSalary of Permanent
+    // def CalculateSalary of Contract
+
+    func totalExpense(s []SalaryCalculator) {
+        expense := 0
+        for _, v := range s {
+            expense = expense + v.CalculateSalary()
+        }
+        fmt.Printf("Total Expense Per Month %d", expense)
+    }
+
+    func main() {
+        pemp1 ...
+        pemp2 ...
+        cemp1 ...
+        employees := []SalaryCalculator(pemp1, pemp2, cemp1)
+        totalExpense(employees)
+    }
+
+Hàm totalExpense nhận tham số slice SalaryCalculator
+SalaryCalculator là interface có phương thức CalculateSalary. Permanent và Contract cũng có pthức CalculateSalary, hai method này đã implement interface SalaryCalculator
+Hàm totalExpense sẽ gọi phương thức CalculateSalary tương ứng tùy theo kiểu dữ liệu (Permanent, Contract)
+Kiểu interface rất có ích trong việc mở rộng đến bất kì loại nhân viên mới nào mà không cần thay đổi logic code, chỉ cần định nghĩa thêm phương thức CalculateSalary tương ứng với kiểu nhân viên đó
+
+# Switch type
+- Với interface, có thể kiểm tra kiểu cụ thể của nó, với mỗi kiểu có cách xử lí khác nhau. Cụ thể:
+    func findType(i interface{}) {
+        switch i.(type) {
+        case string:
+            fmt.Printf("I am a string and my value is %s\n", i.(string))
+        case int:
+            fmt.Printf("I am an int and my value is %d\n", i.(int))
+        default:
+            fmt.Printf("Unknown type\n")
+	    }
+    }
+
+    func main() {
+        findType("Naveen")
+        findType(77)
+        findType(89.98)
+    }
+
+- Cú pháp lấy kiểu của interface:
+     <tên biến interface>.(type)
