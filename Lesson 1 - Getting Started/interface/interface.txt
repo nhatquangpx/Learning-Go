@@ -1,0 +1,114 @@
+# Interface là tập hợp các khai báo phương thức, khi một kiểu dữ liệu định nghĩa tất cả phương thức trong interface thì nó được gọi là implement interface đó
+Hiểu đơn giản: Interface là một đại diện, được dùng cho trường hợp các kiểu dữ liệu có một vài phương thức chung, chúng ta muốn sử dụng phương thức chung đó
+
+Ví dụ:
+    // interface definition
+    type VowelsFinder interface {
+        FindVowels() []rune             // Kiểu rune biểu diễn 1 ký tự Unicode ~~ 32 bit
+    }
+
+    type MyString string
+
+    // MyString implements VowelsFinder
+    func (ms MyString) FindVowels() []rune {
+        var vowels []rune
+        for _, rune := range ms {
+            if rune == 'a' || rune == 'e' || rune == 'i' || rune == 'o' || rune == 'u'
+            vowels = append(vowels, rune)
+        }
+    }
+    return vowels
+
+    func main() {
+        name := MyString ("Nhat Quang")
+        var v VowelsFinder
+        v = name    // possible since MyString implements VowelsFinder
+        fmt.Println("Vowels are %c", v.FindVowels())
+    }
+
+Ở ví dụ này, interface VowelsFinder có phương thức là FindVowels
+Sau đó kiểu MyString định nghĩa methods FindVowels => hiểu là MyString implement interface của VowelsFinder
+Khi đó, trong hàm main, v có kiểu là interface VowelsFinder sau đó được gán giá trị bằng biến name. Điều này được chấp nhận vì biến name là một hiện thực (implement) của VowelsFinder
+
+Ví dụ về tính lương của nhân viên:
+Nhân viên có nhiều loại như nhân viên hợp động, nhân viên lâu năm,.... Mỗi loại sẽ có cách tính lương khác nhau
+    type Permanent struct {
+        empId        int 
+        basicpay    int
+        pf          int
+    }
+    type Contract struct {
+        empId       int
+        basicpay    int
+    }
+
+    // salary of permanent employee is the sum of basic pay and pf 
+    func (p Permanent) CalculateSalary() int {
+        return p.basicpay + p.pf
+    }
+
+    // salary of contract employee is the basic pay alone
+    func (c Contract) CalculateSalary() int {
+        return c.basicpay
+    }
+
+    func main() {
+        pemp1 := Permanent{1, 5000, 20}
+        pemp2 := Permanent{2, 6000, 30}
+        cemp1 := Contract{3, 3000}
+        fmt.Printf("Total expense per month $%d", pemp1.CalculateSalary() + pemp2.CalculateSalary() + cemp1.CalculateSalary())
+    }
+
+Như vậy chúng ta cần dùng interface để bao quát được việc tính lương của Permanent và contract
+
+    type SalaryCalculator interface {
+        CalculatorSalary() int
+    }
+
+    // def Permanent
+    // def Contract
+    // def CalculateSalary of Permanent
+    // def CalculateSalary of Contract
+
+    func totalExpense(s []SalaryCalculator) {
+        expense := 0
+        for _, v := range s {
+            expense = expense + v.CalculateSalary()
+        }
+        fmt.Printf("Total Expense Per Month %d", expense)
+    }
+
+    func main() {
+        pemp1 ...
+        pemp2 ...
+        cemp1 ...
+        employees := []SalaryCalculator(pemp1, pemp2, cemp1)
+        totalExpense(employees)
+    }
+
+Hàm totalExpense nhận tham số slice SalaryCalculator
+SalaryCalculator là interface có phương thức CalculateSalary. Permanent và Contract cũng có pthức CalculateSalary, hai method này đã implement interface SalaryCalculator
+Hàm totalExpense sẽ gọi phương thức CalculateSalary tương ứng tùy theo kiểu dữ liệu (Permanent, Contract)
+Kiểu interface rất có ích trong việc mở rộng đến bất kì loại nhân viên mới nào mà không cần thay đổi logic code, chỉ cần định nghĩa thêm phương thức CalculateSalary tương ứng với kiểu nhân viên đó
+
+# Switch type
+- Với interface, có thể kiểm tra kiểu cụ thể của nó, với mỗi kiểu có cách xử lí khác nhau. Cụ thể:
+    func findType(i interface{}) {
+        switch i.(type) {
+        case string:
+            fmt.Printf("I am a string and my value is %s\n", i.(string))
+        case int:
+            fmt.Printf("I am an int and my value is %d\n", i.(int))
+        default:
+            fmt.Printf("Unknown type\n")
+	    }
+    }
+
+    func main() {
+        findType("Naveen")
+        findType(77)
+        findType(89.98)
+    }
+
+- Cú pháp lấy kiểu của interface:
+     <tên biến interface>.(type)

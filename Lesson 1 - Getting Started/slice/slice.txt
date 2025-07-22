@@ -1,0 +1,86 @@
+# Slice tương tự như mảng, nhưng mạnh mẽ và linh hoạt hơn
+- Dùng để lưu nhiều giá trị cùng loại trong 1 biến duy nhất
+- Độ dài một slice có thể tăng hoặc giảm tùy ý
+- Có 1 số cách tạo 1 lát cắt:
+    + Sử dụng định dạng:  []<kiểu dữ liệu>{<giá trị>}
+    + Tạo slice từ một mảng
+    + Sử dụng hàm make()
+
+# Sử dụng định dạng: []<kiểu dữ liệu>{<giá trị>}
+- Cú pháp: 
+    slice_name := []datatype{values}
+
+Ví dụ:
+    myslice := []int{}
+
+Khởi tạo slice trong quá trình khai báo, sử dụng lệnh sau:
+    myslice := []int{1, 2, 3}
+
+Đoạn mã trên khai báo một slice có độ dài bằng 3 và dung lượng bằng 3
+
+- Trong Go, có hai hàm dùng để trả về độ dài và sức chứa của một slice:
+    + len() - Số lượng phần tử trong lát cắt
+    + cap() - số lượng phần tử mà lát cắt có thể mở rộng hoặc thu hẹp lại 
+
+Ví dụ:
+    myslice1 := []int{}
+    fmt.Println(len(myslice1))
+    fmt.Println(cap(myslice1))
+    fmt.Println(myslice1)
+
+    myslice2 := []string{"Go", "Slices", "Are", "Powerful"}
+    fmt.Println(len(myslice2))
+    fmt.Println(cap(myslice2))
+    fmt.Println(myslice2)
+    // Kết quả: 
+    0
+    0
+    []
+    4
+    4
+    [Go Slices Are Powerful]
+
+# Tạo lát cắt từ một mảng:
+- Cú pháp:
+
+    var myarray = [length]datatype{values}
+    myslice := myarray[start:end]
+
+Ví dụ:
+    arr1 := [6]int{10, 11, 12, 13, 14, 15}
+    myslice := arr1[2:4]
+
+    fmt.Printf("myslice = %v\n", myslice)               // myslice = [12 13]
+    fmt.Printf("length = %d\n", len(myslice))           // length = 2
+    fmt.Printf("capacity = %d\n", cap(myslice))         // capacity = 4
+
+Trong ví dụ này, myslice có độ dài bằng 2, được tạo thành từ arr1 có độ dài 6
+Slice bắt đầu từ phần tử thứ ba có giá trị 12, và có thể mở rộng tiếp đến cuối mảng, do đó dung lượng bằng 4
+Nếu bắt đầu từ 0 thì dung lượng là 6
+
+# Tạo một Slice với hàm make():
+- Cú pháp: 
+
+    slice_name := make([]type, length, capacity)
+
+Nếu tham số capacity không xác định, nó sẽ bằng length
+
+Ví dụ:
+    myslice1 := make([]int, 5, 10)
+    fmt.Printf("myslice1 = %v\n", myslice1)
+    fmt.Printf("length = %d\n", len(myslice1))
+    fmt.Printf("capacity = %d\n", cap(myslice1))
+
+    // with omitted capacity
+    myslice2 := make([]int, 5)
+    fmt.Printf("myslice2 = %v\n", myslice2)
+    fmt.Printf("length = %d\n", len(myslice2))
+    fmt.Printf("capacity = %d\n", cap(myslice2))
+
+    // Kết quả:
+    myslice1 = [0 0 0 0 0]
+    length = 5
+    capacity = 10
+    myslice2 = [0 0 0 0 0]
+    length = 5
+    capacity = 5

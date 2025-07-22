@@ -1,17 +1,55 @@
-# Method là một hàm gắn với một kiểu dữ liệu, thường là struct
+# Golang không hỗ trọ class -> dùng struc để nhóm các attributes
+Tuy nhiên như vậy thì sẽ không quản lí được các Method
+=> Sử dụng methods là một function được khai báo cho một kiểu dữ liệu riêng biệt
+- Kiểu dữ liệu này gọi là receiver
+- Receiver nằm giữa từ khóa func và tên phương thức
+- Kiểu receiver có thể là kiểu struct hoặc kiểu non-struct
 
-Ví dụ: Thay vì viết hàm như sau:
+# Cú pháp:
 
-func printPost(p Post){
-	fmt.Println(p.Title)
-}
+	func (t Type) methodName(parameter list){
+		// body của method
+	}
 
-Chúng ta có thể viết hàm này như một phương thức của struct Post
+Ví dụ:
+	type Employee struct {
+		name string
+		salary int
+		currency string
+	}
 
-func (p Post) Print() {
-	fmt.Println(p.Title)
-}
+	// displaySalary() method has Employee as the receiver type
+	func (e Employee) displaySalary() {
+		fmt.Println("Salary of %s is %s%d", e.name, e.currency, e.salary)
+	}
 
-Giải thích:
-- (p Post) là receiver, tức là đối tượng mà phương thức này sẽ làm việc với nó.
-- Print là tên của phương thức.
+	func main() {
+		emp1 := Employee{
+			name: "James",
+			salary: "2500"
+			currency: "$"
+		}
+		emp1.displaySalary()    // calling displaySalary() method of Employee type
+	}
+
+Ở ví dụ trên, displaySalary chính là một methods của struct Employee. Sau khi khai báo methods, chúng ta có thể gọi method bằng cú pháp
+
+	<tên biến>.<tên method>
+
+# So sánh method và function:
+- Có thể chuyển method thành function theo cách sau:
+Trong ví dụ trên, method displaySalary() có thể viết thành function như sau:
+	func displaySalary(e Employee) {
+		fmt.Println("Salary of %s is %s%d", e.name, e.currency, e.salary)
+	}
+
+- Lý do sử dụng method thay cho function:
+	+ Golang không phải ngôn ngữ hướng đối tượng => dùng struct để quản lí thuộc tính và methods để quản lí các methods trong class
+	+ Methods có thể định nghĩa trùng tên nhau nhưng khác kiểu. Function không hỗ trợ điều đó
+
+# Pointer receivers và Value receivers:
+- Golang hỗ trợ cả value receiver (vd: func (e Employee) changeName ...) và pointer receiver (vd: func (e *Employee) changeAge ...)
+- Sự khác nhau giữa pointer receivers và value receivers:
+	+ Pointer receivers giống như truyền biến con trỏ vào function theo kiểu tham chiếu, trong methods có thể thay đổi được giá trị của Receiver
+	+ Value receivers chúng ta chỉ có thể truy cập giá trị, nhưng không thể thay đổi giá trị của nó
+	
