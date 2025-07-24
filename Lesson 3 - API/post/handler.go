@@ -32,7 +32,7 @@ func CreatePost(c *fiber.Ctx) error{
 	}
 	newPost.ID = nextID
 	nextID++
-	newPost.AuthorID = 1 // Giả sử AuthorID là 1, sau này sẽ thay bằng ID của người dùng đã đăng nhập
+	newPost.AuthorID = c.Locals("user_id").(int) // Lấy user_id từ context đã được middleware gắn vào
 	posts = append(posts, newPost)
 
 	return c.Status(fiber.StatusCreated).JSON(newPost)		// Trả về JSON của bài viết vừa tạo với status code 201 Created

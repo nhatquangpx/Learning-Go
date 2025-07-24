@@ -62,11 +62,12 @@ func main() {
 
 	api := app.Group("/posts", middleware.RequireAuth)
 
-	app.Get("/", post.GetPosts)	// GET tất cả bài viết
-	app.Post("/", post.CreatePost)	// POST bài viết mới
-	app.Delete("/:id", post.DeletePost) // DELETE bài viết theo ID
-	app.Get("/:id", post.GetPostByID) // GET bài viết theo ID
-	app.Put("/:id", post.UpdatePost) // PUT cập nhật bài viết theo ID
-	app.Patch(":id", post.PatchPostTitle) // PATCH cập nhật title bài viết theo ID
+	api.Get("/", post.GetPosts)	// GET tất cả bài viết
+	api.Post("/", post.CreatePost)	// POST bài viết mới
+	api.Delete("/:id", post.DeletePost) // DELETE bài viết theo ID
+	api.Get("/:id", post.GetPostByID) // GET bài viết theo ID
+	api.Put("/:id", post.UpdatePost) // PUT cập nhật bài viết theo ID
+	api.Patch(":id", post.PatchPostTitle) // PATCH cập nhật title bài viết theo ID
+	
 	app.Listen(":3000")				// Bắt đầu chạy server ở cổng 3000
 }

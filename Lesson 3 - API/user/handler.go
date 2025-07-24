@@ -31,6 +31,7 @@ func Register(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"message": "User registered successfully",
+		"user_id": req.ID,
 	})
 }
 
@@ -59,7 +60,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id": user.ID,
+		"user_id": user.ID,
 		"exp": time.Now().Add(time.Hour * 24).Unix(),
 	})
 	// JWT này sẽ được gắn vào các request sau này để xác thực người dùng
