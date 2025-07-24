@@ -108,3 +108,34 @@ func UpdatePost(c *fiber.Ctx) error {
 		"error": "Post not found",
 	})
 }
+
+func PatchPostTitle(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error":" Invalid ID format",
+		})
+	}
+	var req updateTitleRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request body",
+		})
+	}
+	if err := validate.Struct(req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	for i, p := range posts {
+		if p.ID == id {
+			posts[i].Title = req.Title
+			return c.JSON(posts[i])
+		}
+	 }
+
+	 return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+		"error": "Post not found",
+	 })
+}

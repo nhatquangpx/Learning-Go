@@ -57,6 +57,8 @@ func main() {
 	app.Get("/posts", post.GetPosts)	// GET tất cả bài viết
 	app.Post("/posts", post.CreatePost)	// POST bài viết mới
 	app.Delete("/posts/:id", post.DeletePost) // DELETE bài viết theo ID
-	
+	app.Get("/posts/:id", post.GetPostByID) // GET bài viết theo ID
+	app.Put("/posts/:id", post.UpdatePost) // PUT cập nhật bài viết theo ID
+	app.Patch("/posts/:id", post.PatchPostTitle) // PATCH cập nhật title bài viết theo ID
 	app.Listen(":3000")				// Bắt đầu chạy server ở cổng 3000
 }
