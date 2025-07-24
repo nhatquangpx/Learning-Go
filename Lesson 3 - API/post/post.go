@@ -2,8 +2,13 @@ package post
 
 type Post struct {
 	ID      int    `json:"id"`
-	Title   string `json:"title"`
-	Content string `json:"content"`
+	Title   string `json:"title" validate:"required,min=3"`	// Thêm tag validate tối thiểu 3 ký tự
+	Content string `json:"content" validate:"required"`
+	AuthorID int   `json:"author_id"` // Chuẩn bị cho phần login
+}
+
+type updateTitleRequest struct {
+	Title string `json: "title" validate:"required, min = 3"`
 }
 
 var posts = []Post{}
