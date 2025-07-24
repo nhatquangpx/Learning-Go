@@ -49,16 +49,24 @@ package main
 
 import (
 	"go-http-api/post"
+	"go-http-api/user"
+	"go-http-api/middleware"
 	"github.com/gofiber/fiber/v2"		// Fiber là framework HTTP hiện đại và nhẹ, tương tự Express của Node.js
 )
 
 func main() {
 	app := fiber.New()		 		 	// Trả về một *App, đại diện cho HTTP server
-	app.Get("/posts", post.GetPosts)	// GET tất cả bài viết
-	app.Post("/posts", post.CreatePost)	// POST bài viết mới
-	app.Delete("/posts/:id", post.DeletePost) // DELETE bài viết theo ID
-	app.Get("/posts/:id", post.GetPostByID) // GET bài viết theo ID
-	app.Put("/posts/:id", post.UpdatePost) // PUT cập nhật bài viết theo ID
-	app.Patch("/posts/:id", post.PatchPostTitle) // PATCH cập nhật title bài viết theo ID
+
+	app.Post("/register", user.Register)
+	app.Post("/login", user.Login)
+
+	api := app.Group("/posts", middleware.RequireAuth)
+
+	app.Get("/", post.GetPosts)	// GET tất cả bài viết
+	app.Post("/", post.CreatePost)	// POST bài viết mới
+	app.Delete("/:id", post.DeletePost) // DELETE bài viết theo ID
+	app.Get("/:id", post.GetPostByID) // GET bài viết theo ID
+	app.Put("/:id", post.UpdatePost) // PUT cập nhật bài viết theo ID
+	app.Patch(":id", post.PatchPostTitle) // PATCH cập nhật title bài viết theo ID
 	app.Listen(":3000")				// Bắt đầu chạy server ở cổng 3000
 }
