@@ -1,0 +1,6 @@
+Mục tiêu buổi học:
+- Chuẩn hóa thư mục: Tách biệt rõ routers, handlers, models, middleware
+- Tách router ra khỏi main.go: main.go chỉ để boot server
+- Quản lí biến cấu hình bằng .env: Sử dụng github.com/joho/godotenv
+- Tái tổ chức theo domain: user, post, auth làm việc độc lập
+- Chuẩn bị test dễ dàng sau này: Project sạch -> dễ viết unit test
