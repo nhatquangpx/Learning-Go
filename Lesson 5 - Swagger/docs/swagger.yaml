@@ -1,0 +1,47 @@
+basePath: /
+definitions:
+  user.User:
+    properties:
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: REST API with JWT Auth, written in Go using Fiber
+  title: Fiber Blog API
+  version: "1.0"
+paths:
+  /register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Thông tin người dùng
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Đăng ký người dùng mới
+      tags:
+      - Auth
+swagger: "2.0"

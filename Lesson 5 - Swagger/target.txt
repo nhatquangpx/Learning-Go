@@ -1,0 +1,6 @@
+Mục tiêu buổi học:
+- Cài thư viện swaggo/swag: Sinh docs từ comment trong code
+- Ghi chú @Summary, @Param, @Success,...: Tự tạo Swagger UI
+- Kết nối Fiber với Swagger: Truy cập /swagger/index.html
+- Xem và test API trực tiếp: Dễ làm việc với front-end hoặc client
+- Tuân thủ OpenAPI 3.0: Tài liệu API chuẩn công nghiệp
