@@ -1,7 +1,7 @@
 package post
 
 type Post struct {
-	ID      int    `json:"id"`
+	ID      int    `gorm:"primaryKey" json:"id"`
 	Title   string `json:"title" validate:"required,min=3"`	
 	Content string `json:"content" validate:"required"`
 	AuthorID int   `json:"author_id"` 

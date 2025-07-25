@@ -4,10 +4,17 @@ import (
 	"strconv"
 	"github.com/gofiber/fiber/v2"
 	"github.com/go-playground/validator/v10" 
+	"lesson-4/config"
 )
 
 var validate = validator.New()
 func GetPosts(c *fiber.Ctx) error {
+	var posts []Post
+	if err := config.DB.Find(&posts).Error; err !=nil {
+		return c.Status(500).JSON(fiber.Map{
+			"error": "Failed to retrieve posts",
+		})
+	}
 	return c.JSON(posts)
 }
 
@@ -24,33 +31,35 @@ func CreatePost(c *fiber.Ctx) error{
 			"error": err.Error(), 
 		})
 	}
-	newPost.ID = nextID
-	nextID++
 	newPost.AuthorID = c.Locals("user_id").(int) 
-	posts = append(posts, newPost)
+	if err := config.DB.Create(&newPost).Error; err != nil{
+		return c.Status(500).JSON(fiber.Map{
+			"error": "Failed to create post",
+		})
+	}
 
 	return c.Status(fiber.StatusCreated).JSON(newPost)		
 }
 
 func DeletePost(c *fiber.Ctx) error {
-	idParam := c.Params("id")	
-	id, err := strconv.Atoi(idParam)	
+	id, err := strconv.Atoi(c.Params("id"))	
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": "Invalid ID format",
 		})
 	}
-
-	for i, p := range posts {
-		if p.ID == id {
-			posts = append (posts[:i], posts[i+1:]...) 
-			return c.SendStatus(fiber.StatusNoContent) 	
-		}
+	var post Post
+	if err := config.DB.First(&post, id).Error; err != nil {
+		return c.Status(404).JSON(fiber.Map{
+			"error": "Post not found",
+		})
 	}
-
-	return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-		"error": "Post not found",
-	})
+	if err := config.DB.Delete(&post).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"error": "Failed to delete post",
+		})
+	}
+	return c.SendStatus(204)
 }
 
 func GetPostByID(c *fiber.Ctx) error {
@@ -60,16 +69,13 @@ func GetPostByID(c *fiber.Ctx) error {
 			"error": "Invalid ID format",
 		})
 	}
-
-	for _, p := range posts {
-		if p.ID == id {
-			return c.JSON(p)
-		}
+	var post Post
+	if err := config.DB.First(&post, id).Error; err!= nil {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "Post not found",
+		})
 	}
-
-	return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-		"error": "Post not found",
-	})
+	return c.JSON(post)
 }
 
 func UpdatePost(c *fiber.Ctx) error {
@@ -90,17 +96,20 @@ func UpdatePost(c *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
-	for i, p := range posts {
-		if p.ID == id {
-			updated.ID = id	
-			updated.AuthorID = p.AuthorID 
-			posts[i] = updated
-			return c.JSON(updated)
-		}
+	var post Post
+	if err := config.DB.First(&post, id).Error; err != nil {
+		return c.Status(404).JSON(fiber.Map{
+			"error": "Post not found",
+		})
 	}
-	return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-		"error": "Post not found",
-	})
+	post.Title = updated.Title
+	post.Content = updated.Content
+	if err := config.DB.Save(&post).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"error": "Failed to update post",
+		})
+	}
+	return c.JSON(post)
 }
 
 func PatchPostTitle(c *fiber.Ctx) error {
@@ -121,15 +130,17 @@ func PatchPostTitle(c *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
-
-	for i, p := range posts {
-		if p.ID == id {
-			posts[i].Title = req.Title
-			return c.JSON(posts[i])
-		}
-	 }
-
-	 return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-		"error": "Post not found",
-	 })
+	var post Post
+	if err := config.DB.First(&post, id).Error; err != nil {
+		return c.Status(404).JSON(fiber.Map{
+			"error": "Post not found",
+		})
+	}
+	post.Title = req.Title
+	if err := config.DB.Save(&post).Error; err != nil{
+		return c.Status(500).JSON(fiber.Map{
+			"error": "Failed to update post title",
+		})
+	}
+	 return c.JSON(post)
 }

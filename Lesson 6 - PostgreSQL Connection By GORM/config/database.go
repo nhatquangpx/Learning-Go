@@ -28,3 +28,12 @@ func ConnectDatabase() {
 	log.Println("PostgreSQL database connected successfully!")
 }
 
+// Giải thích:
+// - Hàm ConnectDatabase() kết nối đến PostgreSQL sử dụng GORM.
+// - Sprintf để định dạng chuỗi DSN từ biến môi trường.
+// - gorm.Open() mở kết nối đến cơ sở dữ liệu.
+// - postgres.Open(dsn) sử dụng driver PostgreSQL với chuỗi kết nối DSN.
+// - &gorm.Config{} là cấu hình mặc định của GORM.
+// - Nếu kết nối thất bại, log.Fatal sẽ in ra lỗi và dừng chương trình.
+// - Nếu thành công, in ra thông báo kết nối thành công.
+// - Biến DB sẽ lưu trữ kết nối để sử dụng trong các phần khác của ứng dụng.

@@ -16,7 +16,7 @@ import (
 // @BasePath /
 func main() {
 	config.LoadEnv() // Nạp biến môi trường từ .env
-
+	config.ConnectDatabase() // Kết nối đến PostgreSQL
 	app := fiber.New()
 
 	// Đăng ký route Swagger trước khi chạy server

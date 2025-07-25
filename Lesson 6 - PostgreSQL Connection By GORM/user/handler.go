@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
 	"github.com/golang-jwt/jwt/v5"
+	"lesson-4/config"
 	"time"
 )
 
@@ -21,24 +22,25 @@ var jwtSecret = []byte("my_secret_key")
 func Register(c *fiber.Ctx) error {
 	var req User
 	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		return c.Status(400).JSON(fiber.Map{
 			"error": "Invalid request body",
 		})
 	}
 
 	hashed, err := bcrypt.GenerateFromPassword([]byte(req.Password), 10)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		return c.Status(400).JSON(fiber.Map{
 			"error": "Failed to hash password",
 		})
 	}
 
-	req.ID = nextID
-	nextID++
 	req.Password = string(hashed)
-	Users = append(Users, req)
+	if err := config.DB.Create(&req).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"error": "Failed to save user",})
+	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+	return c.Status(201).JSON(fiber.Map{
 		"message": "User registered successfully",
 		"user_id": req.ID,
 	})
@@ -52,18 +54,14 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 	var user User
-	found := false
-	for _, u:= range Users {
-		if u.Username == req.Username {
-			user = u
-			found = true
-			break
-		}
+	if err := config.DB.Where("username = ?",req.Username).First(&user).Error; err != nil {
+		return c.Status(401).JSON(fiber.Map{
+			"error": "Invalid username or password",
+		})
 	}
 
-	if !found || bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)) != nil {
-	// user.Password đã được băm sẵn khi đăng ký, dùng bcrypt.GenerateFromPassword()
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+	if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)) != nil {
+		return c.Status(401).JSON(fiber.Map{
 			"error": "Invalid username or password",
 		})
 	}
