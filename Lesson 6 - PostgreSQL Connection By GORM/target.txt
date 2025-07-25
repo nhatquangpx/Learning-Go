@@ -1,0 +1,6 @@
+Mục tiêu buổi học:
+- Cài đặt và kết nối PostgreSQL: Kết nối DB thực qua .env
+- Cài và dùng gorm.io/gorm: ORM chuẩn trong Go
+- Thay thế slice giả bằng DB thật: Create, Find, Update, Delete 
+- Tự động migrate schema: GORM sẽ tạo bảng nếu chưa có
+- Tương thích với CRUD cũ: Không cần thiết viết lại handler nhiều

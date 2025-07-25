@@ -1,0 +1,64 @@
+Tổng quan Swagger trong Go dùng swaggo/swag
+- Viết chú thích dạng //@Tag ngay trên mỗi handler
+- swag init sẽ quét các file Go, đọc các @Tag để sinh swagger.json
+- Swagger UI sẽ tự động hiển thị mọi thứ rõ ràng
+
+1. Cấu trúc chú thích trong main.Go
+// @title Fiber Blog API 
+-> Tên API
+
+// @version 1.0
+-> Phiên bản, vd: v1.0.0
+
+// @description REST API với JWT, được viết bằng Go + Fiber
+-> Giới thiệu ngắn gọn về hệ thống
+
+// @contact.name Nhật Quang
+// @contact.email doannhatquang0@gmail.com
+-> (tùy chọn) Tên + email người tạo
+
+// @host localhost:3000
+-> Host server khi chạy
+
+// @BasePath /
+-> Đường dẫn gốc đến API (thường là /)
+
+2. Cấu trúc chú thích mỗi handler
+// Register godoc
+
+// @Summary Đăng ký tài khoản mới
+-> Mô tả ngắn 1 dòng chức năng của endpoint
+
+// @Tags Auth
+-> Gom nhóm các API (hiển thị trong Swagger UI)
+
+// @Accept json
+-> Client gửi dữ liệu dạng json
+
+// @Produce json
+-> Server trả về json
+
+// @Param user body user.User true "Thông tin người dùng"
+-> Tham số - gồm: tên, vị trí, kiểu dữ liệu, bắt buộc?, mô tả
+
+// Success 201 {object} map[string]interface{}
+-> Trả về khi thành công (status code 2xx)
+
+// Failure 400 {object} map[string]string
+-> Trả lỗi nếu thất bại (status code 4xx, 5xx)
+
+// @Router /register [post]
+-> Đường dẫn và HTTP method
+
+*** Một số ghi chú quan trọng:
+- Tham số body -> Dùng @Param body body StructName true
+- Tham số path -> Dùng @Param id path int true
+- Dữ liệu trả về -> Dùng struct đã khai báo (post.Post, user.User...)
+- Nếu trả dạng map[string]string -> Có thể dùng {object} map[string]string
+- Không có body trả về (ví dụ DELETE) -> Dùng {string} string "Xóa thành công"
+
+*** Gợi ý tổ chức dễ quản lý:
+- Khai báo #Tags rõ ràng: Auth, User, Post, Comment,...
+- Tạo file docs/response.go chứa struct dùng riêng cho response nếu không dùng model chính
+- Duy trì 1 comment cho mỗi route: giúp đồng đội hoặc FE hiểu rõ API
+- Sau mỗi lần thay đổi comment, chạy lại lệnh "swag init" để cập nhật file docs và swagger.go
