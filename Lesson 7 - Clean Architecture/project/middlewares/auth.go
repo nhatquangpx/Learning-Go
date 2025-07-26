@@ -1,0 +1,1 @@
+// Xác thự JWT, phân quyền

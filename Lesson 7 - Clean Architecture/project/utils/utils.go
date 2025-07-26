@@ -1,0 +1,1 @@
+// Hàm tiện ích (mã hóa, random, v.v.)
