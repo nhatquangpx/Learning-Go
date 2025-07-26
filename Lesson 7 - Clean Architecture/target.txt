@@ -1,0 +1,6 @@
+Mục tiêu của buổi học:
+✅ Biết cách tổ chức mã nguồn Go theo cấu trúc chuẩn, dễ mở rộng
+✅ Biết cách tách handler, service, repository
+✅ Hiểu nguyên tắc Clean Architecture và áp dụng vào thực tế
+✅ Biết cách cấu hình bảo mật an toàn hơn: .env, password, JWT
+✅ Viết được các middleware bảo vệ route nâng cao
